@@ -7,6 +7,11 @@ npm run start
 npm install express
 node server.js
 
-#connection database
+#connection database 
+
+#token pour authentifier l'utilisateur 
+RANDOM_TOKEN_SECRET = "RANDOM_TOKEN_SECRET"
+
+
 
 

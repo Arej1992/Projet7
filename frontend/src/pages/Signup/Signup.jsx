@@ -37,7 +37,7 @@ function Signup() {
         form.email === "" ||
         form.password === ""
       ) {
-        alert("Please Fill The Form");
+        alert("Remplissez le formulaire");
       } else {
         const data = await axios.post(
           "http://localhost:5000/api/auth/signup",
