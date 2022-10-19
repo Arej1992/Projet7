@@ -46,7 +46,7 @@ exports.login = (req, res, next) => {
             isAdmin: user.isAdmin,
             //identification par token pour que utilisateur ne se connecte qu'une seue fois
             token: jwt.sign(
-              { userId: user._id },
+              { userId: user._id , isAdmin: user.isAdmin },
               "RANDOM_TOKEN_SECRET", //clé secret
               { expiresIn: "2h" } //chaque token durée 2h
             ),

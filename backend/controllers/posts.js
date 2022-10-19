@@ -31,7 +31,11 @@ exports.getAllposts = async (req, res, next) => {
 exports.modifyposts = async (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then(async (post) => {
-     
+
+      
+        //Vérifaiction id et admin
+      if(post.userId == req.auth.userId  || req.auth.isAdmin){
+
       const filename = post.image.split("/images/")[1];
       // condition pour confirmer si l'utilisatuer a changé l'image et il était bien supprimé
 
@@ -57,20 +61,30 @@ exports.modifyposts = async (req, res, next) => {
       
         .then(() => res.status(200).json({ message: "Post modifiée" }))
         .catch((error) => res.status(400).json({ error }));
-    })
+  
+    } else {
+      return res.status(400).json({ message: "L'utilisateur ne peux pas supprimer ce post !"  })
+    }     })
+   
+  
     .catch((error) => res.status(400).json({ error }));
 };
 
 exports.deletepost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-     
-      const filename = post.image.split("/images/")[1];
-      fs.unlink(`./images/${filename}`, () => {
-        Post.deleteOne({ _id: req.params.id })
-          .then(() => res.status(200).json({ message: "Post supprimée !" }))
-          .catch((error) => res.status(400).json({ error }));
-      });
+
+      if(post.userId == req.auth.userId  || req.auth.isAdmin){
+        const filename = post.image.split("/images/")[1];
+        fs.unlink(`./images/${filename}`, () => {
+          Post.deleteOne({ _id: req.params.id })
+            .then(() => res.status(200).json({ message: "Post supprimée !" }))
+            .catch((error) => res.status(400).json({ error }));
+        });
+      }else {
+        return res.status(400).json({ message: "L'utilisateur ne peux pas supprimer ce post !"  })
+      } 
+      
     })
     .catch((error) => res.status(500).json({ error }));
 };
